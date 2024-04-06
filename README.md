@@ -7,7 +7,6 @@ This package adds a dynamic select tree field to your Laravel / Filament applica
 
 ![Select Tree](https://github.com/CodeWithDennis/filament-select-tree/assets/23448484/d944b896-134b-414a-b654-9adecc43ba5e)
 
-
 ## Installation
 
 You can install the package via composer:
@@ -150,14 +149,24 @@ Allow soft deleted items to be displayed
 ->withTrashed()
 ```
 
-Specify a different key for your model. 
+Specify a different key for your model.
 For example: you have id, code and parent_code. Your model uses id as key, but the parent-child relation is established between code and parent_code
 
 ```PHP
 ->withKey('code')
 ```
 
+Store fetched models for additional functionality.
+
+```PHP
+->storeResults()
+->afterStateUpdated(function ($state, SelectTree $component) {
+    $component->getResults()
+}),
+```
+
 ## Filters
+
 Use the tree in your table filters. Here's an example to show you how.
 
 ```bash
@@ -191,6 +200,7 @@ use CodeWithDennis\FilamentSelectTree\SelectTree;
 ```
 
 ## Screenshots
+
 ![download.png](./resources/images/example.png)
 
 ## Contributing
@@ -203,9 +213,9 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [CodeWithDennis](https://github.com/CodeWithDennis)
-- [Dipson88](https://github.com/dipson88/treeselectjs)
-- [All Contributors](../../contributors)
+-   [CodeWithDennis](https://github.com/CodeWithDennis)
+-   [Dipson88](https://github.com/dipson88/treeselectjs)
+-   [All Contributors](../../contributors)
 
 ## License
 
