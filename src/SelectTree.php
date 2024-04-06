@@ -60,6 +60,8 @@ class SelectTree extends Field implements HasAffixActions
 
     protected ?Closure $modifyQueryUsing;
 
+    protected ?Closure $modifyChildQueryUsing;
+
     protected Closure|int $defaultOpenLevel = 0;
 
     protected string $direction = 'auto';
@@ -146,6 +148,11 @@ class SelectTree extends Field implements HasAffixActions
             $nullParentQuery = $this->evaluate($this->modifyQueryUsing, ['query' => $nullParentQuery]);
         }
 
+        // If we're at the child level and a modification callback is provided, apply it to non null query
+        if ($this->modifyChildQueryUsing) {
+            $nonNullParentQuery = $this->evaluate($this->modifyChildQueryUsing, ['query' => $nonNullParentQuery]);
+        }
+
         if ($this->withTrashed) {
             $nullParentQuery->withTrashed($this->withTrashed);
             $nonNullParentQuery->withTrashed($this->withTrashed);
@@ -156,7 +163,7 @@ class SelectTree extends Field implements HasAffixActions
 
         // Combine the results from both queries
         $combinedResults = $nullParentResults->concat($nonNullParentResults);
-
+        
         return $this->buildTreeFromResults($combinedResults);
     }
 
@@ -231,13 +238,14 @@ class SelectTree extends Field implements HasAffixActions
         return $node;
     }
 
-    public function relationship(string $relationship, string $titleAttribute, string $parentAttribute, ?Closure $modifyQueryUsing = null): self
+    public function relationship(string $relationship, string $titleAttribute, string $parentAttribute, ?Closure $modifyQueryUsing = null, ?Closure $modifyChildQueryUsing = null): self
     {
         $this->relationship = $relationship;
         $this->titleAttribute = $titleAttribute;
         $this->parentAttribute = $parentAttribute;
         $this->modifyQueryUsing = $modifyQueryUsing;
-
+        $this->modifyChildQueryUsing = $modifyChildQueryUsing;
+        
         return $this;
     }
 
@@ -370,7 +378,7 @@ class SelectTree extends Field implements HasAffixActions
     {
         return $this->evaluate($this->buildTree());
     }
-
+    
     public function getExpandSelected(): bool
     {
         return $this->evaluate($this->expandSelected);
