@@ -40,6 +40,26 @@ SelectTree::make('category_id')
     ->relationship('category', 'name', 'parent_id')
 ```
 
+## Customize Query
+
+Customize the parent query:
+
+```PHP
+use CodeWithDennis\FilamentSelectTree\SelectTree;
+
+SelectTree::make('categories')
+    ->relationship('categories', 'name', 'parent_id', modifyQueryUsing: fn($query) => $query));
+```
+
+Customize the child query:
+
+```PHP
+use CodeWithDennis\FilamentSelectTree\SelectTree;
+
+SelectTree::make('categories')
+    ->relationship('categories', 'name', 'parent_id', modifyChildQueryUsing: fn($query) => $query));
+```
+
 ## Methods
 
 Set a custom placeholder when no items are selected
