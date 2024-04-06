@@ -163,7 +163,7 @@ class SelectTree extends Field implements HasAffixActions
 
         // Combine the results from both queries
         $combinedResults = $nullParentResults->concat($nonNullParentResults);
-        
+
         return $this->buildTreeFromResults($combinedResults);
     }
 
@@ -245,7 +245,7 @@ class SelectTree extends Field implements HasAffixActions
         $this->parentAttribute = $parentAttribute;
         $this->modifyQueryUsing = $modifyQueryUsing;
         $this->modifyChildQueryUsing = $modifyChildQueryUsing;
-        
+
         return $this;
     }
 
@@ -378,7 +378,7 @@ class SelectTree extends Field implements HasAffixActions
     {
         return $this->evaluate($this->buildTree());
     }
-    
+
     public function getExpandSelected(): bool
     {
         return $this->evaluate($this->expandSelected);
