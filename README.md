@@ -25,8 +25,6 @@ php artisan filament:assets
 Use the tree for a `BelongsToMany` relationship
 
 ```PHP
-use CodeWithDennis\FilamentSelectTree\SelectTree;
-
 SelectTree::make('categories')
     ->relationship('categories', 'name', 'parent_id')
 ```
@@ -34,30 +32,24 @@ SelectTree::make('categories')
 Use the tree for a `BelongsTo` relationship
 
 ```PHP
-use CodeWithDennis\FilamentSelectTree\SelectTree;
-
 SelectTree::make('category_id')
     ->relationship('category', 'name', 'parent_id')
 ```
 
-## Customize Query
+## Custom Query
 
-Customize the parent query:
+Customize the parent query
 
 ```PHP
-use CodeWithDennis\FilamentSelectTree\SelectTree;
-
 SelectTree::make('categories')
-    ->relationship('categories', 'name', 'parent_id', modifyQueryUsing: fn($query) => $query));
+    ->relationship(relationship: 'categories', titleAttribute: 'name', parentAttribute: 'parent_id', modifyQueryUsing: fn($query) => $query));
 ```
 
-Customize the child query:
+Customize the child query
 
 ```PHP
-use CodeWithDennis\FilamentSelectTree\SelectTree;
-
 SelectTree::make('categories')
-    ->relationship('categories', 'name', 'parent_id', modifyChildQueryUsing: fn($query) => $query));
+    ->relationship(relationship: 'categories', titleAttribute: 'name', parentAttribute: 'parent_id', modifyChildQueryUsing: fn($query) => $query));
 ```
 
 ## Methods
@@ -197,6 +189,7 @@ use CodeWithDennis\FilamentSelectTree\SelectTree;
         })
 ])
 ```
+
 ## Screenshots
 ![download.png](./resources/images/example.png)
 
