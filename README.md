@@ -165,7 +165,7 @@ Store fetched models for additional functionality
 ```php
 // Now you can access the results in `afterStateUpdated`
 ->afterStateUpdated(function ($state, SelectTree $component) {
-    $component->getResults()
+    $component->getResults();
 }),
 ```
 
