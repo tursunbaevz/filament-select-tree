@@ -168,7 +168,7 @@ class SelectTree extends Field implements HasAffixActions
         // Combine the results from both queries
         $combinedResults = $nullParentResults->concat($nonNullParentResults);
 
-        // store results for additional functionality. results are accessible through $component->getResults()
+        // Store results for additional functionality
         if ($this->storeResults) {
             $this->results =  $combinedResults;
         }
@@ -383,7 +383,6 @@ class SelectTree extends Field implements HasAffixActions
         return $this;
     }
 
-    // store results in variable $results
     public function storeResults(bool $storeResults = true): static
     {
         $this->storeResults = $storeResults;
@@ -395,8 +394,7 @@ class SelectTree extends Field implements HasAffixActions
     {
         return $this->evaluate($this->buildTree());
     }
-    
-    // get results stored in variable $results
+
     public function getResults(): Collection|array|null
     {
         return $this->results;
