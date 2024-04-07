@@ -156,18 +156,6 @@ For example: you have id, code and parent_code. Your model uses id as key, but t
 ->withKey('code')
 ```
 
-Store fetched models for additional functionality
-
-```PHP
-->storeResults()
-```
-
-```php
-// Now you can access the results in `afterStateUpdated`
-->afterStateUpdated(function ($state, SelectTree $component) {
-    $component->getResults();
-}),
-```
 
 ## Filters
 
