@@ -82,6 +82,10 @@ class SelectTree extends Field implements HasAffixActions
 
     protected Closure|bool|null $withTrashed = false;
 
+    protected bool $storeResults = false;
+
+    protected Collection|array|null $results = null;
+
     protected function setUp(): void
     {
         // Load the state from relationships using a callback function.
@@ -164,6 +168,11 @@ class SelectTree extends Field implements HasAffixActions
         // Combine the results from both queries
         $combinedResults = $nullParentResults->concat($nonNullParentResults);
 
+        // Store results for additional functionality
+        if ($this->storeResults) {
+            $this->results =  $combinedResults;
+        }
+
         return $this->buildTreeFromResults($combinedResults);
     }
 
@@ -183,7 +192,7 @@ class SelectTree extends Field implements HasAffixActions
         // Group results by their parent IDs
         foreach ($results as $result) {
             $parentId = $result->{$this->getParentAttribute()};
-            if (! isset($resultMap[$parentId])) {
+            if (!isset($resultMap[$parentId])) {
                 $resultMap[$parentId] = [];
             }
             $resultMap[$parentId][] = $result;
@@ -374,9 +383,21 @@ class SelectTree extends Field implements HasAffixActions
         return $this;
     }
 
+    public function storeResults(bool $storeResults = true): static
+    {
+        $this->storeResults = $storeResults;
+
+        return $this;
+    }
+
     public function getTree(): Collection|array
     {
         return $this->evaluate($this->buildTree());
+    }
+
+    public function getResults(): Collection|array|null
+    {
+        return $this->results;
     }
 
     public function getExpandSelected(): bool
@@ -499,7 +520,7 @@ class SelectTree extends Field implements HasAffixActions
             return null;
         }
 
-        if (! $this->hasCreateOptionActionFormSchema()) {
+        if (!$this->hasCreateOptionActionFormSchema()) {
             return null;
         }
 
@@ -510,7 +531,7 @@ class SelectTree extends Field implements HasAffixActions
                 ));
             })
             ->action(static function (Action $action, array $arguments, SelectTree $component, array $data, ComponentContainer $form) {
-                if (! $component->getCreateOptionUsing()) {
+                if (!$component->getCreateOptionUsing()) {
                     throw new Exception("Select field [{$component->getStatePath()}] must have a [createOptionUsing()] closure set.");
                 }
 
@@ -529,7 +550,7 @@ class SelectTree extends Field implements HasAffixActions
                 $component->state($state);
                 $component->callAfterStateUpdated();
 
-                if (! ($arguments['another'] ?? false)) {
+                if (!($arguments['another'] ?? false)) {
                     return;
                 }
 
