@@ -160,6 +160,11 @@ Store fetched models for additional functionality.
 
 ```PHP
 ->storeResults()
+```
+
+Now you can access the results in `afterStateUpdated`
+
+```php
 ->afterStateUpdated(function ($state, SelectTree $component) {
     $component->getResults()
 }),
@@ -213,9 +218,9 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
--   [CodeWithDennis](https://github.com/CodeWithDennis)
--   [Dipson88](https://github.com/dipson88/treeselectjs)
--   [All Contributors](../../contributors)
+- [CodeWithDennis](https://github.com/CodeWithDennis)
+- [Dipson88](https://github.com/dipson88/treeselectjs)
+- [All Contributors](../../contributors)
 
 ## License
 
