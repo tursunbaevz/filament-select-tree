@@ -82,10 +82,6 @@ class SelectTree extends Field implements HasAffixActions
 
     protected Closure|bool|null $withTrashed = false;
 
-    protected bool $storeResults = false;
-
-    protected Collection|array|null $results = null;
-
     protected function setUp(): void
     {
         // Load the state from relationships using a callback function.
@@ -167,11 +163,6 @@ class SelectTree extends Field implements HasAffixActions
 
         // Combine the results from both queries
         $combinedResults = $nullParentResults->concat($nonNullParentResults);
-
-        // Store results for additional functionality
-        if ($this->storeResults) {
-            $this->results = $combinedResults;
-        }
 
         return $this->buildTreeFromResults($combinedResults);
     }
@@ -383,21 +374,9 @@ class SelectTree extends Field implements HasAffixActions
         return $this;
     }
 
-    public function storeResults(bool $storeResults = true): static
-    {
-        $this->storeResults = $storeResults;
-
-        return $this;
-    }
-
     public function getTree(): Collection|array
     {
         return $this->evaluate($this->buildTree());
-    }
-
-    public function getResults(): Collection|array|null
-    {
-        return $this->results;
     }
 
     public function getExpandSelected(): bool
