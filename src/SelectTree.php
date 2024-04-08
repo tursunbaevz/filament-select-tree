@@ -397,7 +397,7 @@ class SelectTree extends Field implements HasAffixActions
 
     public function getResults(): Collection|array|null
     {
-        return $this->results;
+        return $this->evaluate($this->results);
     }
 
     public function getExpandSelected(): bool
