@@ -156,6 +156,31 @@ For example: you have id, code and parent_code. Your model uses id as key, but t
 ->withKey('code')
 ```
 
+Store fetched models for additional functionality.
+
+```PHP
+->storeResults()
+```
+
+Now you can access the results in disabledOptions/hiddenOptions for custom functions like making only a branch node family selectable.
+
+```PHP
+// Note: $component->getResults() is null in afterStateUpdated() as the tree is rebuilt
+  ->disabledOptions(function ($state, SelectTree $component) {
+                        if ($state) {
+                            $results = $component->getResults();
+                            $selectedNode = $results->firstWhere('id', $state[0]);
+                            $selectedFamily = $results->where('parent_id', $selectedNode?->parent_id)->pluck('id')->toArray();
+
+                            while ($selectedNode?->parent_id) {
+                                $selectedFamily[] = $selectedNode?->parent_id;
+                                $selectedNode = $results->firstWhere('id', $selectedNode?->parent_id);
+                            }
+                            return $results->whereNotIn('id', $selectedFamily)->pluck('id')->toArray();
+                        }
+                        return [];
+                    })
+```
 
 ## Filters
 
