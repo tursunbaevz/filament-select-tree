@@ -170,7 +170,7 @@ class SelectTree extends Field implements HasAffixActions
 
         // Store results for additional functionality
         if ($this->storeResults) {
-            $this->results =  $combinedResults;
+            $this->results = $combinedResults;
         }
 
         return $this->buildTreeFromResults($combinedResults);
