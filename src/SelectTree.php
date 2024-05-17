@@ -585,7 +585,7 @@ class SelectTree extends Field implements HasAffixActions
         return $action;
     }
 
-    public function createOptionModalHeading(string | Closure | null $heading): static
+    public function createOptionModalHeading(string|Closure|null $heading): static
     {
         $this->createOptionModalHeading = $heading;
 
