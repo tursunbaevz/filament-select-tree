@@ -5,7 +5,7 @@
 
 This package adds a dynamic select tree field to your Laravel / Filament application, allowing you to create interactive hierarchical selection dropdowns based on relationships. It's handy for building selection dropdowns with various customization options.
 
-![thumbnail.png](https://raw.githubusercontent.com/CodeWithDennis/filament-select-tree/main/resources/images/thumbnail.png)
+![thumbnail.png](https://raw.githubusercontent.com/CodeWithDennis/filament-select-tree/3.x/resources/images/thumbnail.png)
 
 ## Installation
 
