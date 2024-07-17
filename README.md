@@ -205,8 +205,7 @@ use CodeWithDennis\FilamentSelectTree\SelectTree;
 ```
 
 ## Screenshots
-
-![download.png](./resources/images/example.png)
+[![example](./resources/images/example.png)](https://raw.githubusercontent.com/CodeWithDennis/filament-select-tree/3.x/resources/images/example.png)
 
 ## Contributing
 
