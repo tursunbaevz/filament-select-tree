@@ -314,7 +314,12 @@ html.dark
     
     .treeselect-input,
     .treeselect-list,
-    .treeselect-input__tags-element {
+    .treeselect-input__tags-element,
+    .treeselect-input__tags-count,
+    .treeselect-input__edit,
+    .treeselect-list__item-label,
+    .treeselect-list__item-label-counter,
+    .treeselect-list__empty-text {
         font-size: 16px;
     }
 }
