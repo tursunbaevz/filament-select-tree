@@ -313,3 +313,17 @@ html.dark
     width: 15px;
     cursor: auto;
 }
+
+@media (max-width: 768px) {
+    
+    .treeselect-input,
+    .treeselect-list,
+    .treeselect-input__tags-element,
+    .treeselect-input__tags-count,
+    .treeselect-input__edit,
+    .treeselect-list__item-label,
+    .treeselect-list__item-label-counter,
+    .treeselect-list__empty-text {
+        font-size: 16px;
+    }
+}
