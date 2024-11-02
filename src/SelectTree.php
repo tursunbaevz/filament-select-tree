@@ -136,6 +136,8 @@ class SelectTree extends Field implements HasAffixActions
             return $component->getCustomKey($record);
         });
 
+        $this->dehydrated(fn (SelectTree $component): bool => ! $component->getRelationship() instanceof BelongsToMany);
+
         $this->suffixActions([
             static fn (SelectTree $component): ?Action => $component->getCreateOptionAction(),
         ]);
