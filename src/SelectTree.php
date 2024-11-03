@@ -134,6 +134,8 @@ class SelectTree extends Field implements HasAffixActions
             return $component->getCustomKey($record);
         });
 
+        $this->dehydrated(fn (SelectTree $component): bool => ! $component->getRelationship() instanceof BelongsToMany);
+
         $this->placeholder(static fn (SelectTree $component): ?string => $component->isDisabled() ? null : __('filament-forms::components.select.placeholder'));
 
         $this->suffixActions([
