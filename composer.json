@@ -8,15 +8,15 @@
         "filament",
         "tree"
     ],
-    "homepage": "https://github.com/codewithdennis/filament-select-tree",
+    "homepage": "https://github.com/sebgm/filament-select-tree",
     "support": {
-        "issues": "https://github.com/codewithdennis/filament-select-tree/issues",
-        "source": "https://github.com/codewithdennis/filament-select-tree"
+        "issues": "https://github.com/sebgm/filament-select-tree/issues",
+        "source": "https://github.com/sebgm/filament-select-tree"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": "CodeWithDennis",
+            "name": "Sébastien Dalibard",
             "role": "Developer"
         }
     ],
@@ -58,7 +58,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "CodeWithDennis\\FilamentSelectTree\\FilamentSelectTreeServiceProvider"
+                "SebGM\\FilamentSelectTree\\FilamentSelectTreeServiceProvider"
             ]
         }
     },

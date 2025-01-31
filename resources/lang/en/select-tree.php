@@ -1,6 +1,6 @@
 <?php
 
-// translations for CodeWithDennis/FilamentSelectTree
+// translations for SebGM/FilamentSelectTree
 return [
     //
 ];

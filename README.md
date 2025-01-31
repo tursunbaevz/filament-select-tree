@@ -12,7 +12,7 @@ This package adds a dynamic select tree field to your Laravel / Filament applica
 You can install the package via composer:
 
 ```bash
-composer require codewithdennis/filament-select-tree
+composer require sebgm/filament-select-tree
 ```
 
 ```bash

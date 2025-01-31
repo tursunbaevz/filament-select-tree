@@ -1,10 +1,10 @@
 <?php
 
-namespace CodeWithDennis\FilamentSelectTree\Tests;
+namespace SebGM\FilamentSelectTree\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
-use CodeWithDennis\FilamentSelectTree\FilamentSelectTreeServiceProvider;
+use SebGM\FilamentSelectTree\FilamentSelectTreeServiceProvider;
 use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
 use Filament\Forms\FormsServiceProvider;
@@ -27,7 +27,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'CodeWithDennis\\FilamentSelectTree\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'SebGM\\FilamentSelectTree\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

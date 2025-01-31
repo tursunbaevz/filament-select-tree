@@ -34,6 +34,10 @@ class SelectTree extends Field implements HasAffixActions
 
     protected bool $withCount = false;
 
+    protected bool $isMultiple = true;
+    
+    protected Collection|array|null $options = [];
+
     protected bool $alwaysOpen = false;
 
     protected bool $independent = true;
@@ -88,39 +92,47 @@ class SelectTree extends Field implements HasAffixActions
     {
         // Load the state from relationships using a callback function.
         $this->loadStateFromRelationshipsUsing(static function (self $component): void {
-            // Get the current relationship associated with the component.
-            $relationship = $component->getRelationship();
+            if(empty($component->options)) {
+                // Get the current relationship associated with the component.
+                $relationship = $component->getRelationship();
 
-            // Check if the relationship is a BelongsToMany relationship.
-            if ($relationship instanceof BelongsToMany) {
-                // Retrieve related model instances and extract their IDs into an array.
-                $state = $relationship->getResults()
-                    ->pluck($relationship->getRelatedKeyName())
-                    ->toArray();
+                // Check if the relationship is a BelongsToMany relationship.
+                if ($relationship instanceof BelongsToMany) {
+                    // Retrieve related model instances and extract their IDs into an array.
+                    $state = $relationship->getResults()
+                        ->pluck($relationship->getRelatedKeyName())
+                        ->toArray();
 
-                // Set the component's state with the extracted IDs.
-                $component->state($state);
+                    // Set the component's state with the extracted IDs.
+                    $component->state($state);
+                }
             }
         });
 
         // Save relationships using a callback function.
-        $this->saveRelationshipsUsing(static function (self $component, $state) {
-            // Check if the component's relationship is a BelongsToMany relationship.
-            if ($component->getRelationship() instanceof BelongsToMany) {
-                // Wrap the state in a collection and convert it to an array if it's not set.
-                $state = Arr::wrap($state ?? []);
+        $this->saveRelationshipsUsing(static function (
+            self $component,
+            $state
+        ) {
+            if(empty($component->options)) {
+                // Check if the component's relationship is a BelongsToMany relationship.
+                if ($component->relationship && $component->getRelationship() instanceof BelongsToMany) {
+                    // Wrap the state in a collection and convert it to an array if it's not set.
+                    $state = Arr::wrap($state ?? []);
 
-                $pivotData = $component->getPivotData();
+                    $pivotData = $component->getPivotData();
 
-                // Sync the relationship with the provided state (IDs).
-                if ($pivotData === []) {
-                    $component->getRelationship()->sync($state ?? []);
+                    // Sync the relationship with the provided state (IDs).
+                    if ($pivotData === []) {
+                        $component->getRelationship()->sync($state ?? []);
 
-                    return;
+                        return;
+                    }
+
+                    // Sync the relationship with the provided state (IDs) plus pivot data.
+                    $component->getRelationship()
+                        ->syncWithPivotValues($state ?? [], $pivotData);
                 }
-
-                // Sync the relationship with the provided state (IDs) plus pivot data.
-                $component->getRelationship()->syncWithPivotValues($state ?? [], $pivotData);
             }
         });
 
@@ -134,7 +146,9 @@ class SelectTree extends Field implements HasAffixActions
             return $component->getCustomKey($record);
         });
 
-        $this->dehydrated(fn (SelectTree $component): bool => ! $component->getRelationship() instanceof BelongsToMany);
+        if(!empty($this->relationship)) {
+            $this->dehydrated(fn (SelectTree $component): bool => ! $component->getRelationship() instanceof BelongsToMany);
+        }
 
         $this->placeholder(static fn (SelectTree $component): ?string => $component->isDisabled() ? null : __('filament-forms::components.select.placeholder'));
 
@@ -145,30 +159,44 @@ class SelectTree extends Field implements HasAffixActions
 
     private function buildTree(): Collection
     {
-        // Start with two separate query builders
-        $nullParentQuery = $this->getRelationship()->getRelated()->query()->where($this->getParentAttribute(), $this->getParentNullValue());
-        $nonNullParentQuery = $this->getRelationship()->getRelated()->query()->whereNot($this->getParentAttribute(), $this->getParentNullValue());
+        if($this->options) {
+            $combinedResults = collect($this->options);
+        } else {
+            // Start with two separate query builders
+            $nullParentQuery = $this->getRelationship()
+                ->getRelated()
+                ->query()
+                ->where($this->getParentAttribute(),
+                    $this->getParentNullValue());
+            $nonNullParentQuery = $this->getRelationship()
+                ->getRelated()
+                ->query()
+                ->whereNot($this->getParentAttribute(),
+                    $this->getParentNullValue());
 
-        // If we're not at the root level and a modification callback is provided, apply it to null query
-        if ($this->modifyQueryUsing) {
-            $nullParentQuery = $this->evaluate($this->modifyQueryUsing, ['query' => $nullParentQuery]);
+            // If we're not at the root level and a modification callback is provided, apply it to null query
+            if ($this->modifyQueryUsing) {
+                $nullParentQuery = $this->evaluate($this->modifyQueryUsing,
+                    ['query' => $nullParentQuery]);
+            }
+
+            // If we're at the child level and a modification callback is provided, apply it to non null query
+            if ($this->modifyChildQueryUsing) {
+                $nonNullParentQuery = $this->evaluate($this->modifyChildQueryUsing,
+                    ['query' => $nonNullParentQuery]);
+            }
+
+            if ($this->withTrashed) {
+                $nullParentQuery->withTrashed($this->withTrashed);
+                $nonNullParentQuery->withTrashed($this->withTrashed);
+            }
+
+            $nullParentResults = $nullParentQuery->get();
+            $nonNullParentResults = $nonNullParentQuery->get();
+
+            // Combine the results from both queries
+            $combinedResults = $nullParentResults->concat($nonNullParentResults);
         }
-
-        // If we're at the child level and a modification callback is provided, apply it to non null query
-        if ($this->modifyChildQueryUsing) {
-            $nonNullParentQuery = $this->evaluate($this->modifyChildQueryUsing, ['query' => $nonNullParentQuery]);
-        }
-
-        if ($this->withTrashed) {
-            $nullParentQuery->withTrashed($this->withTrashed);
-            $nonNullParentQuery->withTrashed($this->withTrashed);
-        }
-
-        $nullParentResults = $nullParentQuery->get();
-        $nonNullParentResults = $nonNullParentQuery->get();
-
-        // Combine the results from both queries
-        $combinedResults = $nullParentResults->concat($nonNullParentResults);
 
         // Store results for additional functionality
         if ($this->storeResults) {
@@ -254,6 +282,18 @@ class SelectTree extends Field implements HasAffixActions
         $this->relationship = $relationship;
         $this->titleAttribute = $titleAttribute;
         $this->parentAttribute = $parentAttribute;
+        $this->modifyQueryUsing = $modifyQueryUsing;
+        $this->modifyChildQueryUsing = $modifyChildQueryUsing;
+
+        return $this;
+    }
+
+    public function options(Collection $options, string $titleAttribute, string $parentAttribute, bool $isMultiple, ?Closure $modifyQueryUsing = null, ?Closure $modifyChildQueryUsing = null): self
+    {
+        $this->options = $options;
+        $this->titleAttribute = $titleAttribute;
+        $this->parentAttribute = $parentAttribute;
+        $this->multiple = $isMultiple;
         $this->modifyQueryUsing = $modifyQueryUsing;
         $this->modifyChildQueryUsing = $modifyChildQueryUsing;
 
@@ -434,6 +474,9 @@ class SelectTree extends Field implements HasAffixActions
 
     public function getMultiple(): bool
     {
+        if($this->options) {
+            return $this->isMultiple;
+        }
         return $this->evaluate($this->getRelationship() instanceof BelongsToMany);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeWithDennis\FilamentSelectTree;
+namespace SebGM\FilamentSelectTree;
 
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
@@ -23,6 +23,6 @@ class FilamentSelectTreeServiceProvider extends PackageServiceProvider
         FilamentAsset::register([
             AlpineComponent::make('filament-select-tree', __DIR__.'/../resources/dist/filament-select-tree.js'),
             Css::make('filament-select-tree-styles', __DIR__.'/../resources/dist/filament-select-tree.css'),
-        ], 'codewithdennis/filament-select-tree');
+        ], 'sebgm/filament-select-tree');
     }
 }
