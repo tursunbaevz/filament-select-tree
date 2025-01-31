@@ -35,12 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CodeWithDennis\\FilamentSelectTree\\": "src/"
+            "SebGM\\FilamentSelectTree\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CodeWithDennis\\FilamentSelectTree\\Tests\\": "tests/"
+            "SebGM\\FilamentSelectTree\\Tests\\": "tests/"
         }
     },
     "scripts": {
