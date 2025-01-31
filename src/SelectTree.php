@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeWithDennis\FilamentSelectTree;
+namespace SebGM\FilamentSelectTree;
 
 use Closure;
 use Exception;
@@ -35,7 +35,7 @@ class SelectTree extends Field implements HasAffixActions
     protected bool $withCount = false;
 
     protected bool $isMultiple = true;
-    
+
     protected Collection|array|null $options = [];
 
     protected bool $alwaysOpen = false;
