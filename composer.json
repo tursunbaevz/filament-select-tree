@@ -1,5 +1,5 @@
 {
-    "name": "sebgm/filament-select-tree",
+    "name": "tursunbaevz/filament-select-tree",
     "description": "The multi-level select field enables you to make single selections from a predefined list of options that are organized into multiple levels or depths.",
     "keywords": [
         "CodeWithDennis",
@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "filament/forms": "^3.0",
         "spatie/laravel-package-tools": "^1.15.0",
         "illuminate/contracts": "^11.0|^12.0",
